@@ -86,7 +86,9 @@ for (var i = 0; i < triviaQuestions.length; i++) {
 	// going to loop through the array to access each element in the array
 
 	var para = document.createElement("p");
-	var node = document.createTextNode(triviaQuestions[i][Object.keys(triviaQuestions[i])[0]]);
+	var node = document.createTextNode(
+		triviaQuestions[i][Object.keys(triviaQuestions[i])[0]]
+	);
 	para.appendChild(node);
 	var element = document.getElementById("questions");
 	element.appendChild(para);
@@ -101,13 +103,12 @@ for (var i = 0; i < triviaQuestions.length; i++) {
 	for (var x = 0; x < allAnswerChoices.length; x++) {
 		allAnswerChoices[x];
 
-
-	var para = document.createElement("p");
-	para.setAttribute("type", "radio");
-	var node = document.createTextNode(allAnswerChoices[x]);
-	para.appendChild(node);
-	var element = document.getElementById("questions");
-	element.appendChild(para);
+		var para = document.createElement("p");
+		para.setAttribute("type", "radio");
+		var node = document.createTextNode(allAnswerChoices[x]);
+		para.appendChild(node);
+		var element = document.getElementById("questions");
+		element.appendChild(para);
 	}
 
 	//access to every answer
@@ -116,45 +117,56 @@ for (var i = 0; i < triviaQuestions.length; i++) {
 
 	var para = document.createElement("p");
 	para.setAttribute("type", "radio");
-	var node = document.createTextNode(triviaQuestions[i][Object.keys(triviaQuestions[i])[2]]);
+	var node = document.createTextNode(
+		triviaQuestions[i][Object.keys(triviaQuestions[i])[2]]
+	);
 	para.appendChild(node);
 	var element = document.getElementById("questions");
 	element.appendChild(para);
+}
+
+function generateQuestions() {
+	var currentQuestion = triviaQuestions[questionCounter]
+	$(".question").html(currentQuestion.question)
+	for (let i = 0; i < currentQuestion.answers.length; i++) {
+		var answer = $("<button>").attr("class", "answer");
+		answer.attr("answer", i);
+		answer.text(currentQuestion.answers[i]);
+		$(".answers").append(answer);		
 	}
-
-
-
-
+	clearInterval(createTimer);
+	startTimer();
+};
 
 // limited amount of time to finish the quiz (timer)
 //(countdown timer)
 
-// document.getElementById("timer").innerHTML = 02 + ":" + 00;
-// startTimer();
+document.getElementById("timer").innerHTML = 02 + ":" + 00;
+startTimer();
 
-// function startTimer() {
-// 	var presentTime = document.getElementById("timer").innerHTML;
-// 	var timeArray = presentTime.split(/[:]+/);
-// 	var m = timeArray[0];
-// 	var s = checkSecond(timeArray[1] - 1);
-// 	if (s == 59) {
-// 		m = m - 1;
-// 	}
-// 	//if(m<0){alert('timer completed')}
+function startTimer() {
+	var presentTime = document.getElementById("timer").innerHTML;
+	var timeArray = presentTime.split(/[:]+/);
+	var m = timeArray[0];
+	var s = checkSecond(timeArray[1] - 1);
+	if (s == 59) {
+		m = m - 1;
+	}
+	//if(m<0){alert('timer completed')}
 
-// 	document.getElementById("timer").innerHTML = m + ":" + s;
-// 	setTimeout(startTimer, 1000);
-// }
+	document.getElementById("timer").innerHTML = m + ":" + s;
+	setTimeout(startTimer, 1000);
+}
 
-// function checkSecond(sec) {
-// 	if (sec < 10 && sec >= 0) {
-// 		sec = "0" + sec;
-// 	} // add zero in front of numbers < 10
-// 	if (sec < 0) {
-// 		sec = "59";
-// 	}
-// 	return sec;
-// }
+function checkSecond(sec) {
+	if (sec < 10 && sec >= 0) {
+		sec = "0" + sec;
+	} // add zero in front of numbers < 10
+	if (sec < 0) {
+		sec = "59";
+	}
+	return sec;
+}
 
 //game ends when time runs out
 
