@@ -43,7 +43,7 @@ triviaQuestions = [
 
 	{
 		question:
-			"Jim JOnes the most infamous cult leader in American history. Founded 'Peoples Temple.' How many members participated in the mass murder/suicde in 1978?",
+			"Jim Jones the most infamous cult leader in American history. Founded 'Peoples Temple.' How many members participated in the mass murder/suicde in 1978?",
 
 		answerChoices: ["300", "768", "918", "Unknown"],
 
@@ -85,12 +85,11 @@ var myHTML = "";
 for (var i = 0; i < triviaQuestions.length; i++) {
 	// going to loop through the array to access each element in the array
 
-	myHTML =
-		'<span class="test">Testing out my script! loop #' +
-		triviaQuestions[i][Object.keys(triviaQuestions[i])[0]] +
-		"</span><br/><br/>";
-
-	
+	var para = document.createElement("p");
+	var node = document.createTextNode(triviaQuestions[i][Object.keys(triviaQuestions[i])[0]]);
+	para.appendChild(node);
+	var element = document.getElementById("questions");
+	element.appendChild(para);
 
 	triviaQuestions[i][Object.keys(triviaQuestions[i])[0]];
 
@@ -101,17 +100,31 @@ for (var i = 0; i < triviaQuestions.length; i++) {
 
 	for (var x = 0; x < allAnswerChoices.length; x++) {
 		allAnswerChoices[x];
+
+
+	var para = document.createElement("p");
+	para.setAttribute("type", "radio");
+	var node = document.createTextNode(allAnswerChoices[x]);
+	para.appendChild(node);
+	var element = document.getElementById("questions");
+	element.appendChild(para);
 	}
 
 	//access to every answer
 
 	triviaQuestions[i][Object.keys(triviaQuestions[i])[2]];
 
-	$("#question").html(myHTML);
+	var para = document.createElement("p");
+	para.setAttribute("type", "radio");
+	var node = document.createTextNode(triviaQuestions[i][Object.keys(triviaQuestions[i])[2]]);
+	para.appendChild(node);
+	var element = document.getElementById("questions");
+	element.appendChild(para);
+	}
 
-	
-	//wrapper.innerHTML = myHTML;
-};
+
+
+
 
 // limited amount of time to finish the quiz (timer)
 //(countdown timer)
