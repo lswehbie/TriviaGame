@@ -1,16 +1,24 @@
-#triviaTitle {
+.titleImage {
 
-	text-align: center;
+
+	margin: auto;
 }
 
 
 #questionScreen {
 
-	display: none;
+	text-align: center;
+
+
 }
 
+#timer {
 
-#scoreScreen {
+	font-size: 32pt;
+
+}
+
+#timerWrapper{
 
 	display: none;
 }

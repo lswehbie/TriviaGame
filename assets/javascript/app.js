@@ -2,7 +2,7 @@
 
 //page will reveal # questions that players correctly and incorrectly (score board)
 
-var triviaQuestions;
+var allQuestions;
 var timer;
 var correctAnswers;
 var incorrectAnswers;
@@ -12,7 +12,8 @@ var unanweredQuestions;
 // form multiple choice questions
 //******player can only pick one answer per question
 
-triviaQuestions = [
+
+allQuestions = [
 	{
 		question:
 			"Charles Manson founded 'The Family' cult in 1967. Manson beleived America would soon have a race war. After what Beatles song did he name the 'war' after?",
@@ -24,7 +25,7 @@ triviaQuestions = [
 			"Helter Skelter"
 		],
 
-		correctAnswers: "Helter Skelter"
+		correctAnswers: 3
 	},
 
 	{
@@ -38,7 +39,7 @@ triviaQuestions = [
 			"Fila 96' (Grant Hill II)"
 		],
 
-		correctAnswers: "Nike Decade"
+		correctAnswers: 2
 	},
 
 	{
@@ -47,7 +48,7 @@ triviaQuestions = [
 
 		answerChoices: ["300", "768", "918", "Unknown"],
 
-		correctAnswers: "918"
+		correctAnswers: 2
 	},
 
 	{
@@ -60,7 +61,7 @@ triviaQuestions = [
 			"All women in the cult were the leaders spiritual wives"
 		],
 
-		correctAnswers: "Mass marriage ceremonies"
+		correctAnswers: 0
 	},
 
 	{
@@ -74,75 +75,94 @@ triviaQuestions = [
 			"Orthodox Church"
 		],
 
-		correctAnswers: "Mormon Church"
+		correctAnswers: 1
 	}
 ];
 
-//creating link to html questionScreen div
+var currentquestion = 0;
+var correctAnswers = 0;
 
-var myHTML = "";
-
-for (var i = 0; i < triviaQuestions.length; i++) {
-	// going to loop through the array to access each element in the array
-
-	var para = document.createElement("p");
-	var node = document.createTextNode(
-		triviaQuestions[i][Object.keys(triviaQuestions[i])[0]]
+function setupOptions() {
+	$("#question").html(
+		parseInt(currentquestion) +
+			1 +
+			". " +
+			allQuestions[currentquestion].question
 	);
-	para.appendChild(node);
-	var element = document.getElementById("questions");
-	element.appendChild(para);
-
-	triviaQuestions[i][Object.keys(triviaQuestions[i])[0]];
-
-	// now we need to access answerChoices
-
-	var allAnswerChoices =
-		triviaQuestions[i][Object.keys(triviaQuestions[i])[1]];
-
-	for (var x = 0; x < allAnswerChoices.length; x++) {
-		allAnswerChoices[x];
-
-		var para = document.createElement("p");
-		para.setAttribute("type", "radio");
-		var node = document.createTextNode(allAnswerChoices[x]);
-		para.appendChild(node);
-		var element = document.getElementById("questions");
-		element.appendChild(para);
+	var options = allQuestions[currentquestion].answerChoices;
+	var formHtml = "";
+	for (var i = 0; i < options.length; i++) {
+		formHtml +=
+			'<div><input type="radio" name="option" value="' +
+			i +
+			'" id="option' +
+			i +
+			'"><label for="option' +
+			i +
+			'">' +
+			allQuestions[currentquestion].answerChoices[i] +
+			"</label></div><br/>";
 	}
-
-	//access to every answer
-
-	triviaQuestions[i][Object.keys(triviaQuestions[i])[2]];
-
-	var para = document.createElement("p");
-	para.setAttribute("type", "radio");
-	var node = document.createTextNode(
-		triviaQuestions[i][Object.keys(triviaQuestions[i])[2]]
-	);
-	para.appendChild(node);
-	var element = document.getElementById("questions");
-	element.appendChild(para);
+	$("#form").html(formHtml);
+	$("#option0").prop("checked", true);
 }
 
-function generateQuestions() {
-	var currentQuestion = triviaQuestions[questionCounter]
-	$(".question").html(currentQuestion.question)
-	for (let i = 0; i < currentQuestion.answers.length; i++) {
-		var answer = $("<button>").attr("class", "answer");
-		answer.attr("answer", i);
-		answer.text(currentQuestion.answers[i]);
-		$(".answers").append(answer);		
+function checkAns() {
+	var test = $("input[name=option]:checked");
+	if (
+		$("input[name=option]:checked").val() ===
+		allQuestions[currentquestion].correctAnswers
+	) {
+		correctAnswers++;
 	}
-	clearInterval(createTimer);
-	startTimer();
-};
+}
+
+$(document).ready(function() {
+	$(".jumbotron").hide();
+	$("#start").click(function() {
+		$("#timerWrapper").show();
+		document.getElementById("timer").innerHTML = 02 + ":" + 00;
+		startTimer();
+		$(".jumbotron").fadeIn();
+		$(this).hide();
+	});
+
+	setupOptions();
+
+	$("#next").click(function() {
+		event.preventDefault();
+		checkAns();
+		currentquestion++;
+		
+		if (currentquestion < allQuestions.length) {
+			setupOptions();
+			if (currentquestion == allQuestions.length - 1) {
+				$("#next").html("Submit");
+				$("#buttonNext").hide();
+				$("#next").click(function() {
+					$(".jumbotron").hide();
+					$("#timerWrapper").hide();
+					$("#result")
+						.html(
+							"You correctly answered " +
+								correctAnswers +
+								" out of " +
+								currentquestion +
+								" questions! "
+						)
+						.hide();
+					$("#result").fadeIn(1500);
+				});
+			}
+		}
+	});
+});
+
+//creating link to html questionScreen div
 
 // limited amount of time to finish the quiz (timer)
 //(countdown timer)
 
-document.getElementById("timer").innerHTML = 02 + ":" + 00;
-startTimer();
 
 function startTimer() {
 	var presentTime = document.getElementById("timer").innerHTML;
@@ -168,18 +188,11 @@ function checkSecond(sec) {
 	return sec;
 }
 
-//game ends when time runs out
+// //game ends when time runs out
 
-//variables must start out to equal 0
+// //variables must start out to equal 0
 
-correctAnswers = 0;
-incorrectAnswers = 0;
-unanweredQuestions = 0;
+// correctAnswers = 0;
+// incorrectAnswers = 0;
+// unanweredQuestions = 0;
 
-$("#buttonStart").click(function() {
-	// when the button clicks at the start screen -- it would go to the question screen
-
-	$("#startScreen").hide();
-
-	$("#questionScreen").show();
-});
